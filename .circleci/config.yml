@@ -34,7 +34,7 @@ jobs:
       - run: yarn install
       - run: yarn build
 
-      - run: sed -e "/\/dist/d" .gitignore
+      - run: sed -i -e "/\/dist/d" .gitignore
       - run: git add --all
       - run: git commit -m 'build'
       - run: git push origin build
