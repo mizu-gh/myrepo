@@ -34,7 +34,6 @@ jobs:
       - run: yarn install
       - run: yarn build
 
-      - run: echo $RANDOM >> foo.txt
       - run: sed -e "/\/dist/d" .gitignore
       - run: git add --all
       - run: git commit -m 'build'
