@@ -19,6 +19,9 @@ jobs:
     steps:
       - checkout
 
+      - run: git checkout build
+      - run: git merge origin/master -m "merge"
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -27,8 +30,12 @@ jobs:
             - v1-dependencies-
 
       - run: yarn install
-
       - run: yarn build
+
+      - run: echo $RANDOM >> foo.txt
+      - run: git config user.email "circleci@example.com"
+      - run: git config user.name "circleci"
+      - run: git add --all
 
       - save_cache:
           paths:
