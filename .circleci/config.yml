@@ -19,6 +19,8 @@ jobs:
     steps:
       - checkout
 
+      - run: git config user.email "circleci@example.com"
+      - run: git config user.name "circleci"
       - run: git checkout build
       - run: git merge origin/master -m "merge"
 
@@ -32,10 +34,8 @@ jobs:
       - run: yarn install
       - run: yarn build
 
-      - run: sed -e "/\/dist/d" .gitignore
       - run: echo $RANDOM >> foo.txt
-      - run: git config user.email "circleci@example.com"
-      - run: git config user.name "circleci"
+      - run: sed -e "/\/dist/d" .gitignore
       - run: git add --all
       - run: git commit -m 'build'
       - run: git push origin build
