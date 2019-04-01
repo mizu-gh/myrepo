@@ -26,7 +26,6 @@ jobs:
       - run: git config user.email "circleci@example.com"
       - run: git config user.name "circleci"
       - run: git checkout build
-      - run: git merge origin/master -m "merge"
 
       # Download and cache dependencies
       - restore_cache:
@@ -35,6 +34,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
+      - run: git merge origin/master -m "merge"
       - run: npm install
       - run: npm run build
 
