@@ -39,8 +39,9 @@ jobs:
       - run: npm install
       - run: npm run build
 
-      - run: sed -i -e "/\/dist/d" .gitignore
-      - run: git add --all
+      # - run: sed -i -e "/\/dist/d" .gitignore
+      - run: git add --all -v
+      - run: git add --force -v dist/*
       - run: git commit -m 'build'
       - run: git push
 
