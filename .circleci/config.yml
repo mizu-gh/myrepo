@@ -25,8 +25,7 @@ jobs:
 
       - run: git config user.email "circleci@example.com"
       - run: git config user.name "circleci"
-      - run: git checkout build
-      - run: git push origin build
+      - run: git checkout -b build origine/build
 
       # Download and cache dependencies
       - restore_cache:
@@ -42,7 +41,7 @@ jobs:
       - run: sed -i -e "/\/dist/d" .gitignore
       - run: git add --all
       - run: git commit -m 'build'
-      - run: git push origin build
+      - run: git push
 
       - save_cache:
           paths:
