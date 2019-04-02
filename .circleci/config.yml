@@ -19,11 +19,13 @@ jobs:
       - image: circleci/node:10.14
     steps:
       - checkout
-      - run: git config user.email "circleci@example.com"
-      - run: git config user.name "circleci"
-      - run: git checkout release
-      - run: git pull
-      - run: git merge origin/master -m "merge@CircleCI"
+      - run:
+          command: |
+            git config user.email "circleci@example.com"
+            git config user.name "circleci"
+            git checkout release
+            git pull
+            git merge origin/master -m "merge@CircleCI"
       - persist_to_workspace:
           root: .
           paths:
@@ -57,12 +59,14 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - run: git config user.email "circleci@example.com"
-      - run: git config user.name "circleci"
-      - run: git add --all -v
-      - run: git add --force -v dist/*
-      - run: git commit -m 'build@CircleCI'
-      - run: git push
+      - run:
+          command: |
+            git config user.email "circleci@example.com"
+            git config user.name "circleci"
+            git add --all -v
+            git add --force -v dist/*
+            git commit -m 'build@CircleCI'
+            git push
 
 workflows:
   version: 2
