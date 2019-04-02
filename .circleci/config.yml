@@ -20,11 +20,13 @@ jobs:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run build
 
+  # build_currentと重複が多いけどjobを小分けにして共通化すると遅くなるのでやらない
+  # 正式公開されたらCircleCI2.1のcommandsを使ってもいいかも
   build_release:
     docker:
       - image: circleci/node:10.14
     steps:
-      - checkout
+      - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
       - run:
           command: |
             git config user.email "circleci@example.com"
