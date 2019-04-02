@@ -54,6 +54,9 @@ jobs:
     docker:
       - image: circleci/node:10.14
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8"
       - attach_workspace:
           at: .
       - run: git config user.email "circleci@example.com"
