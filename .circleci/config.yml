@@ -4,17 +4,23 @@
 #
 version: 2
 jobs:
-  checkout_current:
+  build_current:
     docker:
       - image: circleci/node:10.14
     steps:
       - checkout
-      - persist_to_workspace:
-          root: .
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
           paths:
-            - .
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build
 
-  merge_master:
+  build_release:
     docker:
       - image: circleci/node:10.14
     steps:
@@ -26,17 +32,7 @@ jobs:
             git checkout release
             git pull
             git merge origin/master -m "merge@CircleCI"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
-  run_build:
-    docker:
-      - image: circleci/node:10.14
-    steps:
-      - attach_workspace:
-          at: .
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
@@ -47,22 +43,9 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
-  push_release:
-    docker:
-      - image: circleci/node:10.14
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
       - run:
           command: |
-            git config user.email "circleci@example.com"
-            git config user.name "circleci"
             git add --all -v
             git add --force -v dist/*
             git commit -m 'build@CircleCI'
@@ -72,24 +55,16 @@ workflows:
   version: 2
   pull_request:
     jobs:
-      - checkout_current:
+      - build_current:
           filters:
             branches:
               ignore:
                 - master
-      - run_build:
-          requires:
-            - checkout_current
+                - release
   release:
     jobs:
-      - merge_master:
+      - build_release:
           filters:
             branches:
               only:
                 - master
-      - run_build:
-          requires:
-            - merge_master
-      - push_release:
-          requires:
-            - run_build
