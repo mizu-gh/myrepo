@@ -4,37 +4,15 @@
 #
 version: 2
 jobs:
-  checkout_current:
+  try_build:
     docker:
       - image: circleci/node:10.14
+    branches:
+      ignore:
+        - master
+        - build
     steps:
       - checkout
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  merge_master:
-    docker:
-      - image: circleci/node:10.14
-    steps:
-      - checkout
-      - run: git config user.email "circleci@example.com"
-      - run: git config user.name "circleci"
-      - run: git checkout build
-      - run: git pull
-      - run: git merge origin/master -m "merge"
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
-
-  run_build:
-    docker:
-      - image: circleci/node:10.14
-    steps:
-      - attach_workspace:
-          at: .
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
@@ -45,49 +23,31 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run build
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
-  push_release:
+  merge_master:
     docker:
       - image: circleci/node:10.14
+    branches:
+      only:
+        - master
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8"
-      - attach_workspace:
-          at: .
+      - checkout
       - run: git config user.email "circleci@example.com"
       - run: git config user.name "circleci"
+      - run: git checkout release
+      - run: git pull
+      - run: git merge origin/master -m "merge"
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build
       - run: git add --all -v
       - run: git add --force -v dist/*
       - run: git commit -m 'release'
       - run: git push
-
-workflows:
-  version: 2
-  pull_request:
-    jobs:
-      - checkout_current:
-          filters:
-            branches:
-              ignore:
-                - master
-      - run_build:
-          requires:
-            - checkout_current
-  release:
-    jobs:
-      - merge_master:
-          filters:
-            branches:
-              only:
-                - master
-      - run_build:
-          requires:
-            - merge_master
-      - push_release:
-          requires:
-            - run_build
