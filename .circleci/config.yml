@@ -27,9 +27,9 @@ jobs:
       - image: circleci/node:10.14
     steps:
       - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
+      - run: echo 'export OMOTENASHI_VERSION=$(git describe)' >> $BASH_ENV
       - run:
           command: |
-            echo 'export OMOTENASHI_VERSION=$(git describe)' >> $BASH_ENV
             git config user.email "circleci@example.com"
             git config user.name "circleci"
             git checkout release
