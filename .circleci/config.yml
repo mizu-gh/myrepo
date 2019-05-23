@@ -29,6 +29,8 @@ jobs:
       - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
       - run:
           command: |
+            echo 'export OMOTENASHI_VERSION=$(git describe)' >> $BASH_ENV
+            echo $OMOTENASHI_VERSION
             git config user.email "circleci@example.com"
             git config user.name "circleci"
             git checkout release
