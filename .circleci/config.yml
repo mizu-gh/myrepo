@@ -30,12 +30,12 @@ jobs:
       - run:
           command: |
             echo 'export OMOTENASHI_VERSION=$(git describe)' >> $BASH_ENV
-            echo $OMOTENASHI_VERSION
             git config user.email "circleci@example.com"
             git config user.name "circleci"
             git checkout release
             git pull
             git merge origin/master -m "merge@CircleCI"
+      - run: echo $OMOTENASHI_VERSION
 
       - restore_cache:
           keys:
