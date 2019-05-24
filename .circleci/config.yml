@@ -36,7 +36,7 @@ jobs:
             git checkout release
             git pull
             git merge origin/master -m "merge@CircleCI $HOGE"
-            sed -i -e "s/FOO/AAA = '$HOGE'/" a.txt
+            sed -i -e "s/AAA/AAA = '$HOGE'/" a.txt
       - run: echo $HOGE
 
       - restore_cache:
