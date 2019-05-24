@@ -54,7 +54,7 @@ jobs:
           command: |
             git add --all -v
             git add --force -v dist/*
-            git commit -m 'build@CircleCI'
+            git commit -m "build@CircleCI $HOGE"
             git push
 
 workflows:
