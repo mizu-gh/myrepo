@@ -27,17 +27,17 @@ jobs:
       - image: circleci/node:10.14
     steps:
       - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
-      - run: echo "export HOGE=$(git describe)"
-      - run: echo "export HOGE=$(git describe)" >> $BASH_ENV
+      - run: echo "export HOGE_HOGE=$(git describe)"
+      - run: echo "export HOGE_HOGE=$(git describe)" >> $BASH_ENV
       - run:
           command: |
             git config user.email "circleci@example.com"
             git config user.name "circleci"
             git checkout release
             git pull
-            git merge origin/master -m "merge@CircleCI $HOGE"
-            sed -i -e "s/AAA = '.*'/AAA = '$HOGE'/" a.txt
-      - run: echo $HOGE
+            git merge origin/master -m "merge@CircleCI $HOGE_HOGE"
+            sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
+      - run: echo $HOGE_HOGE
 
       - restore_cache:
           keys:
@@ -54,7 +54,7 @@ jobs:
           command: |
             git add --all -v
             git add --force -v dist/*
-            git commit -m "build@CircleCI $HOGE"
+            git commit -m "build@CircleCI $HOGE_HOGE"
             git push
 
 workflows:
