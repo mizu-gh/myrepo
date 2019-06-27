@@ -48,8 +48,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
-      - run: vue-cli-service build --mode production --modern
-      #- run: npm run build
+      - run: npm run build
 
       - run:
           command: |
