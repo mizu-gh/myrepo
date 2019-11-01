@@ -31,8 +31,8 @@ jobs:
       - run: echo "export HOGE_HOGE=$(git describe)" >> $BASH_ENV
       - run:
           command: |
-            # git config user.email "circleci@example.com"
-            # git config user.name "circleci"
+            git config --global user.email "circleci@example.com"
+            git config --global user.name "circleci"
             # git checkout release
             # git pull
             # git merge origin/master -m "merge@CircleCI $HOGE_HOGE"
