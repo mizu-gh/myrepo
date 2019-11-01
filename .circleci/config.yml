@@ -54,7 +54,7 @@ jobs:
       - run: git add --all -v
       - run: git add --force -v dist/*
       - run: git commit -m "build@CircleCI $HOGE_HOGE"
-      - run: git push -u -f release
+      - run: git push -u -f origin release
 
 workflows:
   version: 2
