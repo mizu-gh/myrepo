@@ -51,12 +51,10 @@ jobs:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run build
 
-      - run:
-          command: |
-            git add --all -v
-            git add --force -v dist/*
-            git commit -m "build@CircleCI $HOGE_HOGE"
-            git push -u -f release
+      - run: git add --all -v
+      - run: git add --force -v dist/*
+      - run: git commit -m "build@CircleCI $HOGE_HOGE"
+      - run: git push -u -f release
 
 workflows:
   version: 2
