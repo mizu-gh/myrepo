@@ -40,16 +40,16 @@ jobs:
             sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
       - run: echo $HOGE_HOGE
 
-      # - restore_cache:
-      #     keys:
-      #       - v1-dependencies-{{ checksum "package-lock.json" }}
-      #       - v1-dependencies-
-      # - run: npm install
-      # - save_cache:
-      #     paths:
-      #       - node_modules
-      #     key: v1-dependencies-{{ checksum "package-lock.json" }}
-      # - run: npm run build
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm run build
 
       - run:
           command: |
