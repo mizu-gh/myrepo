@@ -46,12 +46,14 @@ jobs:
             echo "export TARGET_BRANCH=$TARGET_BRANCH" >> $BASH_ENV
 
             # git checkout -B $TARGET_BRANCH
-            git checkout $TARGET_BRANCH
-            if [ $? -gt 0 ]; then
-              git checkout -b $TARGET_BRANCH
-            else
+            if git checkout -q $TARGET_BRANCH; then
+              echo pull
               git pull
+              echo copy
               git checkout $CIRCLE_BRANCH .
+            else
+              echo create
+              git checkout -b $TARGET_BRANCH
             fi
             sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
       - run: echo $HOGE_HOGE
