@@ -37,6 +37,12 @@ jobs:
             # git checkout release
             # git pull
             # git merge origin/master -m "merge@CircleCI $HOGE_HOGE"
+            if [ "$CIRCLE_BRANCH" = "master" ]; then
+              export TARGET_BRANCH=release
+            else
+              export TARGET_BRANCH=$(echo $CIRCLE_BRANCH | sed -e "s/-build$/-product/")
+            fi
+            echo $TARGET_BRANCH
             git checkout -B release
             sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
       - run: echo $HOGE_HOGE
