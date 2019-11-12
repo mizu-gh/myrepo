@@ -1,6 +1,6 @@
 FOO
 HOGE
 BAR
-AAA
+AAA = '1'
 ZZZ
 333
