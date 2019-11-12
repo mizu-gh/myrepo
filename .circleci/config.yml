@@ -44,7 +44,7 @@ jobs:
             fi
             echo $TARGET_BRANCH
             echo "export TARGET_BRANCH=$TARGET_BRANCH" >> $BASH_ENV
-            git checkout -B release
+            git checkout -B $TARGET_BRANCH
             sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
       - run: echo $HOGE_HOGE
 
@@ -62,7 +62,7 @@ jobs:
       - run: git add --all -v
       - run: git add --force -v dist/*
       - run: git commit -m "build@CircleCI $HOGE_HOGE"
-      - run: git push -u -f origin release
+      - run: git push -u -f origin $TARGET_BRANCH
 
 workflows:
   version: 2
