@@ -29,6 +29,7 @@ jobs:
       - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
       - run: echo "export HOGE_HOGE=$(git describe)"
       - run: echo "export HOGE_HOGE=$(git describe)" >> $BASH_ENV
+      - run: echo "$CIRCLE_BRANCH"
       - run:
           command: |
             git config --global user.email "circleci@example.com"
