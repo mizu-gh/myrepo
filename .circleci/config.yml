@@ -29,6 +29,7 @@ jobs:
       - checkout # チェックアウトは無駄だが鍵管理も行なっているので消さないこと
       - run: echo "export HOGE_HOGE=$(git describe)"
       - run: echo "export HOGE_HOGE=$(git describe)" >> $BASH_ENV
+      - run: echo "$CIRCLE_BRANCH"
       - run:
           command: |
             git config --global user.email "circleci@example.com"
@@ -36,7 +37,22 @@ jobs:
             # git checkout release
             # git pull
             # git merge origin/master -m "merge@CircleCI $HOGE_HOGE"
-            git checkout -B release
+            if [ "$CIRCLE_BRANCH" = "master" ]; then
+              export TARGET_BRANCH=release
+            else
+              export TARGET_BRANCH=$(echo $CIRCLE_BRANCH | sed -e "s/-build$/-product/")
+            fi
+            echo $TARGET_BRANCH
+            echo "export TARGET_BRANCH=$TARGET_BRANCH" >> $BASH_ENV
+
+            # git checkout -B $TARGET_BRANCH
+            git checkout $TARGET_BRANCH
+            if [ $? -gt 0 ]; then
+              git checkout -b $TARGET_BRANCH
+            else
+              git pull
+              git checkout $CIRCLE_BRANCH .
+            fi
             sed -i -e "s/AAA = '.*'/AAA = '$HOGE_HOGE'/" a.txt
       - run: echo $HOGE_HOGE
 
@@ -49,12 +65,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: echo $TARGET_BRANCH
       - run: npm run build
-
       - run: git add --all -v
       - run: git add --force -v dist/*
       - run: git commit -m "build@CircleCI $HOGE_HOGE"
-      - run: git push -u -f origin release
+      - run: git push -u origin $TARGET_BRANCH
 
 workflows:
   version: 2
