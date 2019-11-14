@@ -1,6 +1,6 @@
 FOO
 HOGE
 BAR
-AAA = 'v0.0-25-g23c3a69'
+AAA = 'v0.0-26-g4085efb'
 ZZZ
 333
